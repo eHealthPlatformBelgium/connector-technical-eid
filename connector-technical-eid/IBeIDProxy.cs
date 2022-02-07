@@ -4,6 +4,11 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace connector_technical_eid
 {
+    public enum Alias
+    {
+        AUTHENTICATION,
+        NON_REPUDIATION
+    }
     public interface IBeIdProxy
     {
         /**
@@ -27,7 +32,7 @@ namespace connector_technical_eid
         * 
         * </summary>
         */
-        byte[] SignData(byte[] buffer, string digestAlgo, string alias);
+        byte[] SignData(byte[] digestValue, string digestAlgo, Alias alias);
 
         /**
         * <summary>
@@ -48,7 +53,7 @@ namespace connector_technical_eid
          * 
          * </summary>
         */
-        Algorithm GetAlgorithm(string alias);
+        Algorithm GetAlgorithm(Alias alias);
 
         /**
         *<summary>
@@ -63,7 +68,7 @@ namespace connector_technical_eid
         * 
         * </summary>
         */
-        IList<X509Certificate> GetCertificateChain(string alias);
+        IList<X509Certificate> GetCertificateChain(Alias alias);
 
     }
 }
