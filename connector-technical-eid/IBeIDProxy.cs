@@ -7,7 +7,7 @@ namespace connector_technical_eid
     public enum Alias
     {
         AUTHENTICATION,
-        NON_REPUDIATION
+        SIGNATURE
     }
     public interface IBeIdProxy
     {
@@ -42,7 +42,7 @@ namespace connector_technical_eid
         * 
         * </summary>
         */
-        ISet<string> GetAliases();
+        ISet<Alias> GetAliases();
 
         /**
          * <summary>

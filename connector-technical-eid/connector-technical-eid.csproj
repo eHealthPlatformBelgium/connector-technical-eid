@@ -5,4 +5,10 @@
     <RootNamespace>connector_technical_eid</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Net.Pkcs11">
+      <HintPath>packages\Net.Pkcs11.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
