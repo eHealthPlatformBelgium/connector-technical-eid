@@ -16,6 +16,7 @@ namespace UnitTestProject2
             byte[] testdata = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
             byte[] signeddata = proxy.SignData(testdata, "SHA-256", Alias.AUTHENTICATION);
             Assert.IsNotNull(signeddata);
+            Console.WriteLine("signed data: " + BitConverter.ToString(signeddata));
             Console.WriteLine("test ended");
         }
 
