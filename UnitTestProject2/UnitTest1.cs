@@ -9,12 +9,24 @@ namespace UnitTestProject2
     public class UnitTest1
     {
         [TestMethod]
-        public void Test_signature()
+        public void Test_signature_RSA()
         {
             Console.WriteLine("start test");
             var proxy = new BeidPKCS11Proxy();
             byte[] testdata = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
             byte[] signeddata = proxy.SignData(testdata, "SHA-256", Alias.AUTHENTICATION);
+            Assert.IsNotNull(signeddata);
+            Console.WriteLine("signed data: " + BitConverter.ToString(signeddata));
+            Console.WriteLine("test ended");
+        }
+
+        [TestMethod]
+        public void Test_signature_EC()
+        {
+            Console.WriteLine("start test");
+            var proxy = new BeidPKCS11Proxy();
+            byte[] testdata = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            byte[] signeddata = proxy.SignData(testdata, "SHA-384", Alias.AUTHENTICATION);
             Assert.IsNotNull(signeddata);
             Console.WriteLine("signed data: " + BitConverter.ToString(signeddata));
             Console.WriteLine("test ended");

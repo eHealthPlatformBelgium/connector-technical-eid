@@ -8,6 +8,7 @@ using connector_technical_eid.domain;
 using Net.Sf.Pkcs11;
 using Net.Sf.Pkcs11.Objects;
 using Net.Sf.Pkcs11.Wrapper;
+using System.Security.Cryptography;
 
 namespace connector_technical_eid
 {
@@ -119,6 +120,9 @@ namespace connector_technical_eid
         public byte[] SignData(byte[] digestValue, string digestAlgo, Alias alias)
         {
             byte[] result = null;
+            byte[] encryptedData = null;
+            
+            
             // LOG.debug("Signing started");
             using (var m = new BeIDModule())
             {
@@ -131,18 +135,21 @@ namespace connector_technical_eid
                     switch (privateKey.KeyType.KeyType)
                     {
                         case CKK.EC:
-                            session.SignInit(new Mechanism(CKM.ECDSA), privateKey);
+                            SHA384 sha = new SHA384CryptoServiceProvider();
+                            byte[] HashValue = sha.ComputeHash(digestValue);
+                            session.SignInit(new Mechanism(CKM.ECDSA), (PrivateKey)privateKey);
+                            encryptedData = session.Sign(HashValue);
                             break;
                         case CKK.RSA:
-                            session.SignInit(new Mechanism(CKM.RSA_PKCS), privateKey);
+                            session.SignInit(new Mechanism(CKM.SHA1_RSA_PKCS), (PrivateKey)privateKey);
+                            var data = DataToSign(digestValue, digestAlgo, privateKey);
+                            encryptedData = session.Sign(digestValue);
                             break;
                         default:
                             throw new ArgumentException("Unsupported Digest Algorithm: " + digestAlgo);
                     }
-
-                    var data = DataToSign(digestValue, digestAlgo, privateKey);
-                    var signedData = session.Sign(data);
-                    result = ToDerSignature(signedData, privateKey);
+                  
+                    result = ToDerSignature(encryptedData, privateKey);
                 }
             }
             // LOG.debug("Signing done.");
