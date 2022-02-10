@@ -135,20 +135,16 @@ namespace connector_technical_eid
                     switch (privateKey.KeyType.KeyType)
                     {
                         case CKK.EC:
-                            SHA384 sha = new SHA384CryptoServiceProvider();
-                            byte[] HashValue = sha.ComputeHash(digestValue);
                             session.SignInit(new Mechanism(CKM.ECDSA), (PrivateKey)privateKey);
-                            encryptedData = session.Sign(HashValue);
                             break;
                         case CKK.RSA:
-                            session.SignInit(new Mechanism(CKM.SHA1_RSA_PKCS), (PrivateKey)privateKey);
-                            var data = DataToSign(digestValue, digestAlgo, privateKey);
-                            encryptedData = session.Sign(digestValue);
+                            session.SignInit(new Mechanism(CKM.RSA_PKCS), privateKey);
                             break;
                         default:
                             throw new ArgumentException("Unsupported Digest Algorithm: " + digestAlgo);
                     }
-                  
+                    var data = DataToSign(digestValue, digestAlgo, privateKey);
+                    encryptedData = session.Sign(digestValue);
                     result = ToDerSignature(encryptedData, privateKey);
                 }
             }
