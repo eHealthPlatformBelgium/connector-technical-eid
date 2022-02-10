@@ -71,15 +71,11 @@ namespace connector_technical_eid
         {
             using (var m = new BeIDModule())
             {
-                var type = GetCertificate(UppercaseFirst(alias), m).GetPublicKey().GetType().ToString();
-                switch (type)
-                {
-                    //TODO verify type of public key
-                    case "1": return Algorithm.RSA;
-                    case "2": return Algorithm.ECC;
-                    default:
-                        throw new Exception("Unsupported Public key");
-                }
+                byte[] cert = GetCertificate(UppercaseFirst(alias), m).GetRawCertData();
+                X509Certificate2 x509 = new X509Certificate2(cert);
+                if (x509.GetRSAPublicKey() != null) return Algorithm.RSA;
+                if (x509.GetECDsaPublicKey() != null) return Algorithm.ECC;
+                throw new Exception("Unsupported Public key");
             }
         }
 
