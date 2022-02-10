@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System;
 using System.Text;
 using connector_technical_eid;
-
+using connector_technical_eid.domain;
 
 namespace UnitTestProject2
 {
@@ -33,6 +33,19 @@ namespace UnitTestProject2
             byte[] signeddata = proxy.SignData(hash, "SHA-256", Alias.AUTHENTICATION);
             Assert.IsNotNull(signeddata);
             Console.WriteLine("signed data: " + BitConverter.ToString(signeddata));
+            Console.WriteLine("test ended");
+        }
+
+        [TestMethod]
+        public void Test_read_EC()
+        {
+            Console.WriteLine("start test");
+            var proxy = new BeidPKCS11Proxy();
+            SHA256 sha256 = new SHA256CryptoServiceProvider();
+            byte[] hash = sha256.ComputeHash(Encoding.ASCII.GetBytes("data"));
+            BeIDInfo info = proxy.Read();
+            Assert.IsNotNull(info);
+            Console.WriteLine("signed data: " + info.ToString());
             Console.WriteLine("test ended");
         }
 

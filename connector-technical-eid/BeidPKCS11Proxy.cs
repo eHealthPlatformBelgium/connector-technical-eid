@@ -8,7 +8,6 @@ using connector_technical_eid.domain;
 using Net.Sf.Pkcs11;
 using Net.Sf.Pkcs11.Objects;
 using Net.Sf.Pkcs11.Wrapper;
-using System.Security.Cryptography;
 
 namespace connector_technical_eid
 {
@@ -67,7 +66,67 @@ namespace connector_technical_eid
             }
         }
 
-        public Algorithm GetAlgorithm(Alias alias)
+        internal class BeIdInfoGenerator
+        {
+            public static BeIDInfo Generate()
+            {
+                var info = new BeIDInfo();
+
+            using (var m = new BeIDModule())
+            {
+                var identityFile = m.FindObject("DATA_FILE", CKO.DATA) as Data;
+                info.identity = ParseIdentity(identityFile);
+
+                var addressFile = m.FindObject("ADDRESS_FILE", CKO.DATA) as Data;
+                info.address = ParseAddress(addressFile);
+
+                var photoFile = m.FindObject("PHOTO_FILE", CKO.DATA) as Data;
+                if (photoFile != null)
+                {
+                    info.photo = photoFile.Value.Value;
+                }
+
+            }
+
+            return info;
+        }
+
+        private static Identity ParseIdentity(Data data)
+        {
+            var identity = new Identity();
+            var d = data.Value.Value.Parse();
+            identity.cardNumber = d[0x01].ToStr();
+            identity.chipNumber= (d[0x02].ToHex());
+            identity.cardValidityDateBegin=(d[0x03].ToDate());
+            identity.cardValidityDateEnd=(d[0x04].ToDate());
+            identity.cardDeliveryMunicipality=(d[0x05].ToStr());
+            identity.nationalNumber=(d[0x06].ToStr());
+            identity.name=(d[0x07].ToStr());
+            identity.firstName=(d[0x08].ToStr());
+            identity.middleName=(d[0x09].ToStr());
+            identity.nationality=(d[0x0A].ToStr());
+            identity.placeOfBirth=(d[0x0B].ToStr());
+            identity.dateOfBirth=(d[0x0C].ToBirthDate());
+            identity.gender=(d[0x0D].ToGender());
+            identity.nobleCondition=(d[0x0E].ToStr());
+            identity.documentType=(d[0x0F].ToDocType());
+            identity.specialStatus=(d[0x10].ToSpec());
+            //   identity.setSpecialOrganisation(d[0].ToSpecialOrganisation());
+            return identity;
+        }
+
+        private static Address ParseAddress(Data data)
+        {
+            var d = data.Value.Value.Parse();
+            var address = new Address();
+            address.streetAndNumber=(d[0x01].ToString());
+            address.zip=(d[0x02].ToString());
+            address.municipality=(d[0x03].ToString());
+            return address;
+        }
+    }
+
+    public Algorithm GetAlgorithm(Alias alias)
         {
             using (var m = new BeIDModule())
             {
@@ -110,7 +169,7 @@ namespace connector_technical_eid
 
         public BeIDInfo Read()
         {
-            throw new NotImplementedException();
+            return BeIdInfoGenerator.Generate();
         }
 
         public byte[] SignData(byte[] digestValue, string digestAlgo, Alias alias)

@@ -3,12 +3,12 @@
 namespace connector_technical_eid {
     public class Identity
     {
-        enum Gender
+        public enum Gender
         {
             MALE, 
             FEMALE
         }
-        enum DocumentType
+       public enum DocumentType
         {
             BELGIAN_CITIZEN,
             KIDS_CARD,
@@ -30,7 +30,7 @@ namespace connector_technical_eid {
             FOREIGNER_EU,
             FOREIGNER_EU_PLUS
         }
-        enum SpecialStatus
+      public  enum SpecialStatus
         {
             NO_STATUS, 
             WHITE_CANE, 
@@ -40,7 +40,7 @@ namespace connector_technical_eid {
             YELLOW_CANE_EXTENDED_MINORITY
         }
 
-        enum SpecialOrganisation
+      public  enum SpecialOrganisation
         {
             UNSPECIFIED, 
             SHAPE, NATO, 
@@ -49,47 +49,53 @@ namespace connector_technical_eid {
             UNKNOWN
         }
 
-        private string cardNumber;
+        public  string cardNumber;
 
-        private string chipNumber;
+        public  string chipNumber;
 
-        private DateTime cardValidityDateBegin;
+        public  DateTime cardValidityDateBegin;
 
-        private DateTime cardValidityDateEnd;
+        public  DateTime cardValidityDateEnd;
 
-        private string cardDeliveryMunicipality;
+        public  string cardDeliveryMunicipality;
 
-        private string nationalNumber;
+        public  string nationalNumber;
 
-        private string name;
+        public  string name;
 
-        private string firstName;
+        public  string firstName;
 
-        private string middleName;
+        public  string middleName;
 
-        private string nationality;
+        public  string nationality;
 
-        private string placeOfBirth;
+        public  string placeOfBirth;
 
-        private DateTime dateOfBirth;
+        public  DateTime dateOfBirth;
 
-        private Gender gender;
+        public  Gender gender;
 
-        private string nobleCondition;
+        public  string nobleCondition;
 
-        private DocumentType documentType;
+        public  DocumentType documentType;
 
-        private SpecialStatus specialStatus;
+        public  SpecialStatus specialStatus;
 
-        private byte[] photoDigest;
+        public  byte[] photoDigest;
 
-        private string duplicate;
+        public  string duplicate;
 
-        private SpecialOrganisation specialOrganisation;
+        public  SpecialOrganisation specialOrganisation;
 
-        private Boolean memberOfFamily;
+        public  Boolean memberOfFamily;
 
-        private byte[] data;
+        public  byte[] data;
+        public
+
+        override String ToString()
+        {
+            return "name: " + name + " firstName: "+firstName;
+        }
 
     }
 }

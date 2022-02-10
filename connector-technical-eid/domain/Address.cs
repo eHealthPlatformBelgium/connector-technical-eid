@@ -8,13 +8,13 @@ namespace connector_technical_eid.domain
 {
     public class Address
     {
-        private string streetAndNumber;
+        public string streetAndNumber;
 
-        private string zip;
+        public string zip;
 
-        private string municipality;
+        public string municipality;
 
-        private byte[] data;
+        public byte[] data;
 
     }
 }

@@ -8,8 +8,17 @@ namespace connector_technical_eid.domain
 {
     public class BeIDInfo
     {
-        private Identity identity;
-        private Address address;
-        private byte[] photo;
+        public Identity identity;
+        public Address address;
+        public byte[] photo;
+
+        public override string ToString()
+        {
+            return "BeIDInfo: {" +
+                "Identity: {"+identity.ToString()+"}" +
+                 ", Address: {" + address.ToString() + "}" +
+                "}";
+        }
+
     }
 }
